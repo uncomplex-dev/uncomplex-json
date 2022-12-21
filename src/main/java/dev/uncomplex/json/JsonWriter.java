@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -98,40 +99,22 @@ public class JsonWriter implements Closeable {
         writeChar('}');
     }
 
-    private void writeNumber(double number) throws IOException {
-        if (number % 1L == 0) {
-            writeChars(Long.toString((long)number));
-        } else {
-            writeChars(Double.toString(number));
-        }
+    private void writeNumber(BigDecimal number) throws IOException {
+        writeChars(number.stripTrailingZeros().toPlainString());
     }
 
     private void writeString(String s) throws IOException {
         writeChar('"');
         for (int c : (Iterable<Integer>) () -> s.codePoints().iterator()) {
             switch (c) {
-                case '"':
-                    writeChars("\\\"");
-                    break;
-                case '\\':
-                    writeChars("\\\\");
-                    break;
-                case '\n':
-                    writeChars("\\n");
-                    break;
-                case '\r':
-                    writeChars("\\r");
-                    break;
-                case '\t':
-                    writeChars("\\t");
-                    break;
-                case '\b':
-                    writeChars( "\\b");
-                    break;
-                case '\f':
-                    writeChars( "\\f");
-                    break;
-                default:
+                case '"' -> writeChars("\\\"");
+                case '\\' -> writeChars("\\\\");
+                case '\n' -> writeChars("\\n");
+                case '\r' -> writeChars("\\r");
+                case '\t' -> writeChars("\\t");
+                case '\b' -> writeChars( "\\b");
+                case '\f' -> writeChars( "\\f");
+                default -> {
                     if (c < ' ') {
                         writeChars("\\u00");
                         writeChar(HEX_CHARS[(c >> 4) & 0xF]);
@@ -139,6 +122,7 @@ public class JsonWriter implements Closeable {
                     } else {
                         writeChar(c);
                     }
+                }
             }
         }
         writeChar('"');
@@ -154,7 +138,7 @@ public class JsonWriter implements Closeable {
         } else if (value.isString()) {
             writeString(value.asString());
         } else if (value.isNumber()) {
-            writeNumber(value.asNumber());
+            writeNumber(value.asDecimal());
         } else if (value.isBoolean()) {
             writeChars(value.asBoolean() ? "true" : "false");
         }

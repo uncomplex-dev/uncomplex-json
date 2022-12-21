@@ -3,6 +3,7 @@ package dev.uncomplex.json;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -33,17 +34,21 @@ public class JsonValue {
     public JsonValue(List<JsonValue> value) {
         this.value = value;
     }
-
-    public JsonValue(double value) {
+    
+    public JsonValue(BigDecimal value) {
         this.value = value;
     }
 
+    public JsonValue(double value) {
+        this.value = BigDecimal.valueOf(value);
+    }
+
     public JsonValue(int value) {
-        this.value = (double)value;
+        this.value = BigDecimal.valueOf(value);
     }
 
     public JsonValue(long value) {
-        this.value = (double)value;
+        this.value = BigDecimal.valueOf(value);
     }
 
     public JsonValue(boolean value) {
@@ -53,6 +58,7 @@ public class JsonValue {
     public JsonValue(String value) {
         this.value = value;
     }
+    
 
     public List<JsonValue> asArray() {
         return asType(List.class, "value is not an array");
@@ -61,18 +67,27 @@ public class JsonValue {
     public boolean asBoolean() {
         return asType(Boolean.class, "value is not boolean");
     }
+    
+    public BigDecimal asDecimal() {
+        return asType(BigDecimal.class, "value is not a double number");
+    }
 
+    public double asDouble() {
+        return asType(BigDecimal.class, "value is not a double").doubleValue();
+    }
+
+    public double asFloat() {
+        return asType(BigDecimal.class, "value is not a float").floatValue();
+    }
+    
     public int asInt() {
-        return asType(Double.class, "value is not a number").intValue();
+        return asType(BigDecimal.class, "value is not a integer").intValueExact();
     }
 
     public long asLong() {
-        return asType(Double.class, "value is not a number").longValue();
+        return asType(BigDecimal.class, "value is not a long integer").longValueExact();
     }
 
-    public double asNumber() {
-        return asType(Double.class, "value is not a number");
-    }
 
     public Map<String, JsonValue> asObject() {
         return asType(Map.class, "value is not an object");
@@ -132,7 +147,7 @@ public class JsonValue {
     }
 
     public boolean isNumber() {
-        return (value != null && value instanceof Double);
+        return (value != null && value instanceof BigDecimal);
     }
 
     public boolean isObject() {

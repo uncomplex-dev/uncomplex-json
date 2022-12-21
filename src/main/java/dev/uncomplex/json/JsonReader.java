@@ -3,6 +3,7 @@ package dev.uncomplex.json;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -215,9 +216,9 @@ public class JsonReader {
     readNumber() since the standard Java BigDecimal has the same format
     as the lambda number we do not have to parse
      */
-    private double readNumber() throws IOException, ParseException {
+    private BigDecimal readNumber() throws IOException, ParseException {
         try {
-            return Double.parseDouble(readToken());
+            return new BigDecimal(readToken());
         } catch (NumberFormatException ex) {
             throw error("invalid number");
         }

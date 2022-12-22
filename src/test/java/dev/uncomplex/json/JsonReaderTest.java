@@ -77,10 +77,6 @@ public class JsonReaderTest {
         assertEquals("\u0001", read("\"\\u0001\"").asString());
         assertEquals("\u0ABC", read("\"\\u0ABC\"").asString());
         assertEquals("\u0abc", read("\"\\u0abc\"").asString());
-        testUtf8CodePoints(0x7f, 0x7FF);
-        testUtf8CodePoints(0x800, 0x9FF);
-        testUtf8CodePoints(0xE000, 0xE0FF);
-        testUtf8CodePoints(0x10000, 0x100FF);
     }
 
     @Test
@@ -129,18 +125,5 @@ public class JsonReaderTest {
         return value.toString();
     }
 
-    private void testUtf8CodePoints(int start, int end) throws IOException, ParseException {
-        StringBuilder sb = new StringBuilder();
-        for (int i = start; i <= end; ++i) {
-            sb.appendCodePoint(i);
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream(0x80);
-        JsonWriter w = new JsonWriter(out);
-        w.write(new JsonValue(sb.toString()));
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        JsonReader r = new JsonReader(in);
-        var result = r.read().asString();
-        assertTrue(result.equals(sb.toString()));
-    }
 
 }

@@ -15,16 +15,23 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-
+    
+        
+    <distributionManagement>
+        <repository>
+            <id>uncomplex-dev</id>
+            <name>GitHub uncomplex.dev Package Repository</name>
+            <url>https://maven.pkg.github.com/uncomplex-dev/packages</url>
+        </repository>
+    </distributionManagement>
+    
     <dependencies>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -42,14 +49,5 @@
                 <version>3.2.1</version>
             </plugin>
         </plugins>
-
     </build>
-    
-    <distributionManagement>
-        <repository>
-            <id>lambda-repo</id>
-            <name>GitHub Lambda Package Repository</name>
-            <url>https://maven.pkg.github.com/lambda-limited/repo</url>
-        </repository>
-    </distributionManagement>
 </project>

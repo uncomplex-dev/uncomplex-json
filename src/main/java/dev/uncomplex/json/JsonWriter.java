@@ -2,8 +2,8 @@ package dev.uncomplex.json;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +17,9 @@ public class JsonWriter implements Closeable {
     private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
     private static final Logger LOG = Logger.getLogger(JsonWriter.class.getName());
 
-    private final OutputStream out;
+    private final Writer out;
 
-    public JsonWriter(OutputStream out) {
+    public JsonWriter(Writer out) {
         this.out = out;
     }
 
@@ -46,57 +46,33 @@ public class JsonWriter implements Closeable {
     }
 
 
-    /*
-    Encode character as UTF-8 byte sequence.  
-     */
-    private void writeChar(int c) throws IOException {
-        if (c <= 0x7F) {
-            writeByte(c);
-        } else if (c <= 0x7FF) {
-            writeByte(0xC0 | (c >> 6));
-            writeByte(0x80 | (c & 0x3F));
-        } else if (c <= 0xFFFF) {
-            writeByte(0xE0 | (c >> 12));
-            writeByte(0x80 | ((c >> 6) & 0x3F));
-            writeByte(0x80 | (c & 0x3F));
-        } else if (c <= 0x10FFFF) {
-            writeByte(0xF0 | (c >> 18));
-            writeByte(0x80 | ((c >> 12) & 0x3F));
-            writeByte(0x80 | ((c >> 6) & 0x3F));
-            writeByte(0x80 | (c & 0x3F));
-        } else {
-            throw new UnsupportedEncodingException("Character out of range for UTF-8 encoding");
-        }
-    }
-
+ 
     private void writeChars(String s) throws IOException {
-        for (int c : (Iterable<Integer>) () -> s.codePoints().iterator()) {
-            writeChar(c);
-        }
+        out.write(s);
     }
 
     private void writeArray(List<JsonValue> list) throws IOException {
-        writeChar('[');
+        out.write('[');
         String separator = "";
         for (var value : list) {
             writeChars(separator);
             writeValue(value);
             separator = ",";
         }
-        writeChar(']');
+        out.write(']');
     }
 
     private void writeObject(Map<String, JsonValue> map) throws IOException {
         String separator = "";
-        writeChar('{');
+        out.write('{');
         for (var e : map.entrySet()) {
             writeChars(separator);
             writeString(e.getKey());
-            writeChar(':');
+            out.write(':');
             writeValue(e.getValue());
             separator = ",";
         }
-        writeChar('}');
+        out.write('}');
     }
 
     private void writeNumber(BigDecimal number) throws IOException {
@@ -104,7 +80,7 @@ public class JsonWriter implements Closeable {
     }
 
     private void writeString(String s) throws IOException {
-        writeChar('"');
+        out.write('"');
         for (int c : (Iterable<Integer>) () -> s.codePoints().iterator()) {
             switch (c) {
                 case '"' -> writeChars("\\\"");
@@ -117,15 +93,15 @@ public class JsonWriter implements Closeable {
                 default -> {
                     if (c < ' ') {
                         writeChars("\\u00");
-                        writeChar(HEX_CHARS[(c >> 4) & 0xF]);
-                        writeChar(HEX_CHARS[c & 0xF]);
+                        out.write(HEX_CHARS[(c >> 4) & 0xF]);
+                        out.write(HEX_CHARS[c & 0xF]);
                     } else {
-                        writeChar(c);
+                        out.write(c);
                     }
                 }
             }
         }
-        writeChar('"');
+        out.write('"');
     }
 
     private void writeValue(JsonValue value) throws IOException {

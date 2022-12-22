@@ -96,24 +96,9 @@ public class JsonWriterTest {
         assertEquals("\"\\u0001\"", write("\u0001"));
         assertEquals("\"a\"", write("\u0061"));
         //test UTF-8 encodings
-        testUtf8CodePoints(0x7f, 0x7FF);
-        testUtf8CodePoints(0x800, 0x9FF);
-        testUtf8CodePoints(0xE000, 0xE0FF);
-        testUtf8CodePoints(0x10000, 0x100FF);
+
     }
 
-    private void testUtf8CodePoints(int start, int end) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        for (int i = start; i <= end; ++i) {
-            sb.appendCodePoint(i);
-        }
-        String test = "\"" + sb.toString() + "\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream(0x80);
-        JsonWriter w = new JsonWriter(out);
-        w.write(new JsonValue(sb.toString()));
-        String result = out.toString(StandardCharsets.UTF_8);
-        assertTrue(test.equals(result));
-    }
 
     private String write(String value) throws IOException {
         return write(new JsonValue(value));

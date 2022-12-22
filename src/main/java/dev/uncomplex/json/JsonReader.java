@@ -3,6 +3,8 @@ package dev.uncomplex.json;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -26,53 +28,16 @@ import java.util.List;
  */
 public class JsonReader {
 
-    /*
-        The length of the utf8 octet sequence 
-        based on the first octet in the sequence.  A length of zero
-        indicates an illegal encoding.
-     */
-    static final byte[] UTF8_LENGTH = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-        4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-
-    /*
-        Adjustment values used to 'remove' the tag bits in each utf8
-        sequence.  These are constant for any sequence of a given length
-        and can be removed with a single subtraction.
-     */
-    static final int[] UTF8_TAG = {
-        0x00000000,
-        0x00000000,
-        0x00003080,
-        0x000E2080,
-        0x03C82080
-    };
-
     private int c;
-    private InputStream in;
+    private final Reader r;
     private int pos = 0;
 
-    public JsonReader(InputStream in) {
-        this.in = in;
+    public JsonReader(Reader r) {
+        this.r = r;
     }
 
     public JsonReader(String input) {
-        this(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+        this(new StringReader(input));
     }
 
     public JsonValue read() throws IOException, ParseException {
@@ -126,19 +91,8 @@ public class JsonReader {
     Read and decode UTF-8 encoded character from input byte stream
      */
     private void readChar() throws IOException {
-        c = in.read();
+        c = r.read();
         ++pos;
-        if (c == -1) {
-            return;
-        }
-        int utf8 = c;
-        int len = UTF8_LENGTH[c];
-        for (int i = 1; i < len; ++i) {
-            c = in.read();
-            ++pos;
-            utf8 = (utf8 << 6) + c;
-        }
-        c = utf8 - UTF8_TAG[len];
     }
 
     private int readHexDigit() throws IOException, ParseException {

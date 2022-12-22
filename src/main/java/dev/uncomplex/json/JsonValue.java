@@ -3,6 +3,7 @@ package dev.uncomplex.json;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -202,10 +203,10 @@ public class JsonValue {
     @Override
     public String toString() {
         try {
-            var out = new ByteArrayOutputStream();
+            var out = new StringWriter();
             var w = new JsonWriter(out);
             w.write(this);
-            return out.toString(StandardCharsets.UTF_8);
+            return out.toString();
         } catch (IOException e) {
             return super.toString();
         }

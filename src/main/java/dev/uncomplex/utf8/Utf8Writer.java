@@ -1,17 +1,27 @@
 package dev.uncomplex.utf8;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 /**
  *
- * @author james
+ * @author James Thorpe
  */
 public class Utf8Writer extends java.io.Writer {
 
     private final OutputStream out;
     private boolean closed = false;
+    
+    public static byte[] toBytes(String s) throws IOException {
+        var r = new StringReader(s);
+        var bytes = new ByteArrayOutputStream();
+        var w = new Utf8Writer(bytes);
+        r.transferTo(w);
+        return bytes.toByteArray();   
+    }
 
     public Utf8Writer(OutputStream out) {
         this.out = out;

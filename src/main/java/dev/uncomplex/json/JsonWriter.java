@@ -2,7 +2,6 @@ package dev.uncomplex.json;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.List;

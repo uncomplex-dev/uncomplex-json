@@ -1,11 +1,12 @@
 package dev.uncomplex.json;
 
+/**
+ * @author James Thorpe
+*/
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;

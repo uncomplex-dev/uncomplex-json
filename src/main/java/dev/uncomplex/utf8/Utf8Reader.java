@@ -1,11 +1,13 @@
 package dev.uncomplex.utf8;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 
 /**
  *
- * @author james
+ * @author James Thorpe
  */
 public class Utf8Reader extends java.io.Reader {
 
@@ -46,6 +48,15 @@ public class Utf8Reader extends java.io.Reader {
         0x03C82080
     };
 
+    public static String toString(InputStream in) {
+        var r = new Utf8Reader(in);
+        return r.toString();
+    }
+
+    public static String toString(byte[] bytes) {
+        return toString(new ByteArrayInputStream(bytes));
+    }
+
     private final InputStream in;
 
     public Utf8Reader(InputStream in) {
@@ -54,10 +65,12 @@ public class Utf8Reader extends java.io.Reader {
 
     @Override
     public int read(char[] cbuf, int off, int len) throws IOException {
-        for(int i = 0; i < len; ++i) {
+        for (int i = 0; i < len; ++i) {
             int c = read();
-            if (c == -1) return i;
-            cbuf[off + i] = (char)read();
+            if (c == -1) {
+                return i;
+            }
+            cbuf[off + i] = (char) read();
         }
         return len;
     }
@@ -83,5 +96,15 @@ public class Utf8Reader extends java.io.Reader {
         }
         return utf8;
     }
-
+    
+    @Override
+    public String toString() {
+        try {
+            var w = new StringWriter();
+            transferTo(w);
+            return w.toString();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex.toString(), ex);
+        }
+    }
 }

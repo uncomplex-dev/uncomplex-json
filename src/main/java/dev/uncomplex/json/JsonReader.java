@@ -3,10 +3,7 @@ package dev.uncomplex.json;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -109,9 +106,9 @@ public class JsonReader {
         throw error("invalid hex digit '%c'", ch);
     }
 
-    private List<JsonValue> readArray() throws IOException, ParseException {
+    private JsonArray readArray() throws IOException, ParseException {
         readChar(); // skip '['
-        List<JsonValue> list = new ArrayList<>();
+        var list = new JsonArray();
         skipWs();
         if (!consume(']')) {
             readArrayElements(list);
@@ -134,9 +131,9 @@ public class JsonReader {
         }
     }
 
-    private HashMap<String, JsonValue> readObject() throws IOException, ParseException {
+    private JsonMap readMap() throws IOException, ParseException {
         readChar(); // skip '{'
-        HashMap<String, JsonValue> map = new HashMap<>();
+        var map = new JsonMap();
         skipWs();
         if (!consume('}')) {
             readMembers(map);
@@ -145,7 +142,7 @@ public class JsonReader {
         return map;
     }
 
-    private void readMember(HashMap<String, JsonValue> map) throws IOException, ParseException {
+    private void readMember(JsonMap map) throws IOException, ParseException {
         skipWs();
         String key = readString();
         skipWs();
@@ -156,7 +153,7 @@ public class JsonReader {
         map.put(key, value);
     }
 
-    private void readMembers(HashMap<String, JsonValue> map) throws IOException, ParseException {
+    private void readMembers(JsonMap map) throws IOException, ParseException {
         readMember(map);
         while (consume(',')) {
             readMember(map);
@@ -167,9 +164,9 @@ public class JsonReader {
     readNumber() since the standard Java BigDecimal has the same format
     as the lambda number we do not have to parse
      */
-    private BigDecimal readNumber() throws IOException, ParseException {
+    private JsonNumber readNumber() throws IOException, ParseException {
         try {
-            return new BigDecimal(readToken());
+            return new JsonNumber(readToken());
         } catch (NumberFormatException ex) {
             throw error("invalid number");
         }
@@ -228,42 +225,42 @@ public class JsonReader {
     private JsonValue readValue() throws IOException, ParseException {
         switch (c) {
             case '"':
-                return new JsonValue(readString());
+                return new JsonString(readString());
             case '[':
-                return new JsonValue(readArray());
+                return readArray();
             case '{':
-                return new JsonValue(readObject());
+                return readMap();
             case '+':
             case '-':
-                return new JsonValue(readNumber());
+                return readNumber();
             case 't':
-                return new JsonValue(readTrue());
+                return readTrue();
             case 'f':
-                return new JsonValue(readFalse());
+                return readFalse();
             case 'n':
                 readNull();
-                return new JsonValue();
+                return new JsonNull();
             default:
                 if (c >= '0' && c <= '9') {
-                    return new JsonValue(readNumber());
+                    return readNumber();
                 } else {
                     throw error("invalid value");
                 }
         }
     }
 
-    private boolean readTrue() throws IOException, ParseException {
+    private JsonTrue readTrue() throws IOException, ParseException {
         if (!readToken().equals("true")) {
             throw error("invalid value");
         }
-        return true;
+        return new JsonTrue();
     }
 
-    private boolean readFalse() throws IOException, ParseException {
+    private JsonFalse readFalse() throws IOException, ParseException {
         if (!readToken().equals("false")) {
             throw error("invalid value");
         }
-        return false;
+        return new JsonFalse();
     }
 
     private void readNull() throws IOException, ParseException {

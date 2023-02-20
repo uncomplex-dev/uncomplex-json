@@ -57,11 +57,11 @@ public class JsonReaderTest {
     @Test
     public void testNumbers() throws Exception {
         System.out.println("Number Tests");
-        assertEquals(0, read("0").asInt(), 0);
-        assertEquals(123, read("123").asLong(), 0);
-        assertEquals(1.2, read("1.2").asDouble(), 0.0001);
-        assertEquals(-1.23e-97, read("-1.23e-97").asDouble(), 0.0001);
-        assertEquals(+1.23E+97, read("+1.23E+97").asDouble(), 0.0001);
+        assertEquals(0, read("0").asNumber().intValueExact(), 0);
+        assertEquals(123, read("123").asNumber().longValueExact(), 0);
+        assertEquals(1.2, read("1.2").asNumber().doubleValue(), 0.0001);
+        assertEquals(-1.23e-97, read("-1.23e-97").asNumber().doubleValue(), 0.0001);
+        assertEquals(+1.23E+97, read("+1.23E+97").asNumber().doubleValue(), 0.0001);
     }
 
 

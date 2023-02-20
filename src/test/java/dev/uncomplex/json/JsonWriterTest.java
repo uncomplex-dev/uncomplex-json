@@ -40,38 +40,38 @@ public class JsonWriterTest {
     @Test
     public void testBoolean() throws Exception {
         System.out.println("Boolean tests");
-        assertEquals("false", write(new JsonValue(false)));
-        assertEquals("true", write(new JsonValue(true)));
+        assertEquals("false", write(new JsonFalse()));
+        assertEquals("true", write(new JsonTrue()));
     }
 
     @Test
-    public void testObject() throws Exception {
+    public void testMap() throws Exception {
         System.out.println("Object tests");
-        var map = new HashMap<String, JsonValue>();
-        map.put("int", new JsonValue("124"));
-        map.put("array", new JsonValue(new ArrayList<>()));
-        map.put("string", new JsonValue("this is a string"));
-        map.put("object", new JsonValue(new HashMap<>()));
-        assertEquals("{\"string\":\"this is a string\",\"array\":[],\"int\":\"124\",\"object\":{}}", write(map));
+        var map = new JsonMap();
+        map.put("int", new JsonNumber("124"));
+        map.put("array", new JsonArray());
+        map.put("string", new JsonString("this is a string"));
+        map.put("object", new JsonMap());
+        assertEquals("{\"array\":[],\"int\":124,\"object\":{},\"string\":\"this is a string\"}", write(map));
     }
 
     @Test
     public void testArray() throws Exception {
         System.out.println("Array tests");
-        ArrayList<JsonValue> list = new ArrayList<>();
+        JsonArray list = new JsonArray();
         assertEquals("[]", write(list));
-        list.add(new JsonValue(123));
+        list.add(new JsonNumber(123));
         assertEquals("[123]", write(list));
-        list.add(new JsonValue("test"));
+        list.add(new JsonString("test"));
         assertEquals("[123,\"test\"]", write(list));
-        list.add(new JsonValue(new ArrayList<>()));
+        list.add(new JsonArray());
         assertEquals("[123,\"test\",[]]", write(list));
     }
 
     @Test
     public void testNull() throws Exception {
         System.out.println("null test");
-        assertEquals("null", write(new JsonValue()));
+        assertEquals("null", write(new JsonNull()));
     }
 
     @Test
@@ -101,20 +101,13 @@ public class JsonWriterTest {
 
 
     private String write(String value) throws IOException {
-        return write(new JsonValue(value));
+        return write(new JsonString(value));
     }
 
     private String write(double value) throws IOException {
-        return write(new JsonValue(value));
+        return write(new JsonNumber(value));
     }
 
-    private String write(List<JsonValue> value) throws IOException {
-        return write(new JsonValue(value));
-    }
-
-    private String write(Map<String, JsonValue> value) throws IOException {
-        return write(new JsonValue(value));
-    }
 
     private String write(JsonValue value) throws IOException {
         return value.toString();

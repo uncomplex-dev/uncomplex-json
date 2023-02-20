@@ -106,14 +106,14 @@ public class JsonWriter implements Closeable {
     private void writeValue(JsonValue value) throws IOException {
         if (value.isNull()) {
             writeChars("null");
-        } else if (value.isObject()) {
-            writeObject(value.asObject());
+        } else if (value.isMap()) {
+            writeObject(value.asMap());
         } else if (value.isArray()) {
             writeArray(value.asArray());
         } else if (value.isString()) {
             writeString(value.asString());
         } else if (value.isNumber()) {
-            writeNumber(value.asDecimal());
+            writeNumber(value.asNumber());
         } else if (value.isBoolean()) {
             writeChars(value.asBoolean() ? "true" : "false");
         }

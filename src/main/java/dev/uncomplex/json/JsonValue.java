@@ -38,7 +38,7 @@ public interface JsonValue {
     }
 
 
-    default List<JsonValue> asArray() {
+    default JsonArray asArray() {
         throw new ClassCastException("value is not an array");
     }
 
@@ -50,7 +50,7 @@ public interface JsonValue {
         throw new ClassCastException("value is not a number");
     }
    
-    default Map<String, JsonValue> asMap() {
+    default JsonMap asMap() {
         throw new ClassCastException("value is not a map");
     }
 

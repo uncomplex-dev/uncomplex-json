@@ -21,7 +21,7 @@ public class JsonArray extends ArrayList<JsonValue> implements JsonValue {
     }
     
     @Override
-    public ArrayList<JsonValue> asArray() {
+    public JsonArray asArray() {
         return this;
     }
     

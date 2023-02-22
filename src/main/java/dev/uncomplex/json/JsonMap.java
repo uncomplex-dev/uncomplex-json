@@ -27,7 +27,7 @@ public class JsonMap extends TreeMap<String,JsonValue> implements JsonValue {
     }
     
     @Override
-    public Map<String, JsonValue> asMap() {
+    public JsonMap asMap() {
         return this;
     }
     

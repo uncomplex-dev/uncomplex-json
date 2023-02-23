@@ -111,7 +111,7 @@ public class JsonReader {
         var list = new JsonArray();
         skipWs();
         if (!consume(']')) {
-            readArrayElements(list);
+            readArrayElements(list.asArray());
             consumeOrError(']');
         }
         return list;
@@ -150,7 +150,7 @@ public class JsonReader {
         skipWs();
         JsonValue value = readValue();
         skipWs();
-        map.put(key, value);
+        map.asMap().put(key, value);
     }
 
     private void readMembers(JsonMap map) throws IOException, ParseException {

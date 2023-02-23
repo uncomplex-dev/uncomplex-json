@@ -9,26 +9,29 @@ import java.util.TreeMap;
  *
  * @author jthorpe
  */
-public class JsonMap extends TreeMap<String,JsonValue> implements JsonValue {
-
+public class JsonMap implements JsonValue {
+    
+    private final TreeMap<String,JsonValue> value;
+    
     public JsonMap() {
+        value = new TreeMap<>();
     }
 
     public JsonMap(Comparator<? super String> comparator) {
-        super(comparator);
+        value = new TreeMap<>(comparator);
     }
 
     public JsonMap(Map<? extends String, ? extends JsonValue> m) {
-        super(m);
+        value = new TreeMap(m);
     }
 
     public JsonMap(SortedMap<String, ? extends JsonValue> m) {
-        super(m);
+        value = new TreeMap(m);
     }
     
     @Override
-    public JsonMap asMap() {
-        return this;
+    public Map<String,JsonValue> asMap() {
+        return value;
     }
     
     @Override

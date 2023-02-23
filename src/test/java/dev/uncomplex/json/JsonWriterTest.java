@@ -48,10 +48,10 @@ public class JsonWriterTest {
     public void testMap() throws Exception {
         System.out.println("Object tests");
         var map = new JsonMap();
-        map.put("int", new JsonNumber("124"));
-        map.put("array", new JsonArray());
-        map.put("string", new JsonString("this is a string"));
-        map.put("object", new JsonMap());
+        map.asMap().put("int", new JsonNumber("124"));
+        map.asMap().put("array", new JsonArray());
+        map.asMap().put("string", new JsonString("this is a string"));
+        map.asMap().put("object", new JsonMap());
         assertEquals("{\"array\":[],\"int\":124,\"object\":{},\"string\":\"this is a string\"}", write(map));
     }
 
@@ -60,11 +60,11 @@ public class JsonWriterTest {
         System.out.println("Array tests");
         JsonArray list = new JsonArray();
         assertEquals("[]", write(list));
-        list.add(new JsonNumber(123));
+        list.asArray().add(new JsonNumber(123));
         assertEquals("[123]", write(list));
-        list.add(new JsonString("test"));
+        list.asArray().add(new JsonString("test"));
         assertEquals("[123,\"test\"]", write(list));
-        list.add(new JsonArray());
+        list.asArray().add(new JsonArray());
         assertEquals("[123,\"test\",[]]", write(list));
     }
 

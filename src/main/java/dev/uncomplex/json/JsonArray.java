@@ -2,27 +2,31 @@ package dev.uncomplex.json;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
  * @author jthorpe
  */
-public class JsonArray extends ArrayList<JsonValue> implements JsonValue {
+public class JsonArray implements JsonValue {
+    private final ArrayList<JsonValue> value;
 
     public JsonArray(int initialCapacity) {
-        super(initialCapacity);
+        value = new ArrayList<>(initialCapacity);
     }
 
     public JsonArray() {
+        value = new ArrayList<>();
     }
 
     public JsonArray(Collection<? extends JsonValue> c) {
-        super(c);
+        value = new ArrayList<>(c);
     }
     
+    
     @Override
-    public JsonArray asArray() {
-        return this;
+    public List<JsonValue> asArray() {
+        return value;
     }
     
     @Override

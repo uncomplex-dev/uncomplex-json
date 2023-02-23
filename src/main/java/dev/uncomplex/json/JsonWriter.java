@@ -61,7 +61,7 @@ public class JsonWriter implements Closeable {
         out.write(']');
     }
 
-    private void writeObject(Map<String, JsonValue> map) throws IOException {
+    private void writeMap(Map<String, JsonValue> map) throws IOException {
         String separator = "";
         out.write('{');
         for (var e : map.entrySet()) {
@@ -107,7 +107,7 @@ public class JsonWriter implements Closeable {
         if (value.isNull()) {
             writeChars("null");
         } else if (value.isMap()) {
-            writeObject(value.asMap());
+            writeMap(value.asMap());
         } else if (value.isArray()) {
             writeArray(value.asArray());
         } else if (value.isString()) {

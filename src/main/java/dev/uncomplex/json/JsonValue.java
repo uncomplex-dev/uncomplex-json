@@ -46,6 +46,15 @@ public interface JsonValue {
         throw new ClassCastException("value is not boolean");
     }
 
+    default double asDouble() {
+        throw new ClassCastException("value is not a number");
+    }
+
+    default long asLong() {
+        throw new ClassCastException("value is not a number");
+    }
+    
+    
     default BigDecimal asNumber() {
         throw new ClassCastException("value is not a number");
     }

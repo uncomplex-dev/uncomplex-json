@@ -32,6 +32,16 @@ public class JsonNumber implements JsonValue {
     }
     
     @Override
+    public double asDouble() {
+        return value.doubleValue();
+    }
+    
+    @Override
+    public long asLong() {
+        return value.longValueExact();
+    }
+    
+    @Override
     public BigDecimal asNumber() {
         return value;
     }

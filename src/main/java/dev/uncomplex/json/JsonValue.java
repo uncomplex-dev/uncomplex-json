@@ -1,5 +1,7 @@
 package dev.uncomplex.json;
 
+import dev.uncomplex.utf8.Utf8Writer;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
@@ -67,6 +69,18 @@ public interface JsonValue {
         throw new ClassCastException("value is not a string");
     }
     
+    
+    default byte[] toJsonBytes() {
+        try {
+            var bytes = new ByteArrayOutputStream();
+            var out = new Utf8Writer(bytes);
+            var w = new JsonWriter(out);
+            w.write(this);
+            return bytes.toByteArray();
+        } catch (IOException e) {
+            return new byte[0];
+        }
+    }
     
     default String toJsonString() {
         try {

@@ -23,7 +23,7 @@ public class JsonString implements JsonValue {
     
     @Override
     public String toString() {
-        return toJsonString();
+        return value;
     }    
 
 }

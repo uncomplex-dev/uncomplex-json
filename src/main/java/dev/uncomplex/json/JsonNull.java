@@ -32,5 +32,10 @@ public class JsonNull implements JsonValue {
     public String toString() {
         return "null";
     }
+    
+    @Override
+    public String toJsonString() {
+        return "null";
+    }    
 
 }

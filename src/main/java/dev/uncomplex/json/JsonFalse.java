@@ -20,4 +20,9 @@ public class JsonFalse implements JsonValue {
         return "false";
     }
     
+    @Override
+    public String toJsonString() {
+        return "false";
+    }
+    
 }

@@ -110,7 +110,7 @@ public class JsonWriterTest {
 
 
     private String write(JsonValue value) throws IOException {
-        return value.toString();
+        return value.toJsonString();
     }
 
 

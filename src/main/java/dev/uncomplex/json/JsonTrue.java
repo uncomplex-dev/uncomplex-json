@@ -20,4 +20,10 @@ public class JsonTrue implements JsonValue {
     public String toString() {
         return "true";
     }
+    
+        
+    @Override
+    public String toJsonString() {
+        return "true";
+    }
 }

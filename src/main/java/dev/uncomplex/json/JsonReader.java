@@ -238,8 +238,7 @@ public class JsonReader {
             case 'f':
                 return readFalse();
             case 'n':
-                readNull();
-                return new JsonNull();
+                return readNull();
             default:
                 if (c >= '0' && c <= '9') {
                     return readNumber();
@@ -263,10 +262,11 @@ public class JsonReader {
         return new JsonFalse();
     }
 
-    private void readNull() throws IOException, ParseException {
+    private JsonNull readNull() throws IOException, ParseException {
         if (!readToken().equals("null")) {
             throw error("invalid value");
         }
+        return new JsonNull();
     }
 
     private void skipWs() throws IOException {

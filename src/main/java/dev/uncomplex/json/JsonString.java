@@ -26,4 +26,20 @@ public class JsonString implements JsonValue {
         return value;
     }    
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj instanceof JsonString s) {
+            return value.equals(s.value);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+    
+    
+
 }

@@ -3,17 +3,11 @@
  */
 package dev.uncomplex.json;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -24,22 +18,6 @@ import static org.junit.Assert.*;
 public class JsonReaderTest {
 
     public JsonReaderTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -108,8 +86,8 @@ public class JsonReaderTest {
             read(s);
             fail();
         } catch (RuntimeException | ParseException ex) {
-            assertTrue(String.format("expected error message containing '%s' but got '%s'\n", msgFragment, ex.getMessage()),
-                    ex.getMessage().contains(msgFragment));
+            assertTrue(ex.getMessage().contains(msgFragment),
+                    String.format("expected error message containing '%s' but got '%s'\n", msgFragment, ex.getMessage()));
         }
     }
 

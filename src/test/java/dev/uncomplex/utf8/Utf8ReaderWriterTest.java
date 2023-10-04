@@ -4,8 +4,9 @@ package dev.uncomplex.utf8;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -24,7 +25,7 @@ public class Utf8ReaderWriterTest {
         testUtf8CodePoints(0x10000, 0x100FF);   // 4 bytes (sample)
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void testClose()  throws IOException {
         // write after close should throw an IOException
         ByteArrayOutputStream out = new ByteArrayOutputStream(10);
@@ -32,8 +33,7 @@ public class Utf8ReaderWriterTest {
         w.write("test");
         w.close();
         w.close(); // should do nothing
-        w.write( "test"); // should throw.
-        fail();
+        assertThrows(IOException.class, () -> { w.write( "test"); }); // should throw.
     }
     
     private void testUtf8CodePoints(int start, int end) throws IOException {

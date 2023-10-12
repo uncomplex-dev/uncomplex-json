@@ -101,7 +101,7 @@ public class Utf8Reader extends java.io.Reader {
         try {
             int c;
             var sb = new StringBuilder();
-            while ((c = read()) != 0) {
+            while ((c = read()) != -1) {
                 sb.append((char)c);
             }
             return sb.toString();

@@ -44,7 +44,6 @@ public class JsonMap implements JsonValue {
         return put(key, new JsonString(val));
     }
     
-
     public JsonMap() {
         value = new TreeMap<>();
     }

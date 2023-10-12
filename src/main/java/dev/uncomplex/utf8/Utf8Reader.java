@@ -3,7 +3,6 @@ package dev.uncomplex.utf8;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 
 /**
  *
@@ -100,9 +99,12 @@ public class Utf8Reader extends java.io.Reader {
     @Override
     public String toString() {
         try {
-            var w = new StringWriter();
-            transferTo(w);
-            return w.toString();
+            int c;
+            var sb = new StringBuilder();
+            while ((c = read()) != 0) {
+                sb.append((char)c);
+            }
+            return sb.toString();
         } catch (IOException ex) {
             throw new RuntimeException(ex.toString(), ex);
         }

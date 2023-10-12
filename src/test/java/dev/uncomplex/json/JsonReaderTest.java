@@ -55,6 +55,7 @@ public class JsonReaderTest {
         assertEquals("\u0001", read("\"\\u0001\"").asString());
         assertEquals("\u0ABC", read("\"\\u0ABC\"").asString());
         assertEquals("\u0abc", read("\"\\u0abc\"").asString());
+        
     }
 
     @Test

@@ -82,7 +82,7 @@ public class JsonReader {
     }
 
     /*
-    Read and decode UTF-8 encoded character from input byte stream
+    Read input byte stream and record position for error handling
      */
     private void readChar() throws IOException {
         c = r.read();

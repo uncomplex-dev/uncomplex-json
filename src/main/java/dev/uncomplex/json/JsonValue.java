@@ -84,7 +84,7 @@ public interface JsonValue {
     }
     
     default JsonValue get(String key) {
-        return asMap().get(key);
+        return asMap().getOrDefault(key, new JsonNull());
     }
     
     static JsonMap put(String key, JsonValue val) {
